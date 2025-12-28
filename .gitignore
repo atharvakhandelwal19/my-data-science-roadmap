@@ -1,0 +1,19 @@
+# --- System Junk Files ---
+.DS_Store
+**/.DS_Store
+.ipynb_checkpoints
+**/__pycache__/
+*/data/*
+
+
+# --- Data Files (Never upload these) ---
+*.csv
+*.xlsx
+*.json
+*.pdf
+**/*.csv
+**/*.xlsx
+
+# --- Environments ---
+venv/
+env/

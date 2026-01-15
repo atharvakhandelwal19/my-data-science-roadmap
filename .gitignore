@@ -17,3 +17,24 @@
 # --- Environments ---
 venv/
 env/
+
+# Images
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.bmp
+*.tiff
+*.webp
+
+# Videos
+*.mp4
+*.avi
+*.mov
+*.mkv
+*.wmv
+*.flv
+
+# OpenCV data folders
+11_OpenCV/data/Photos/
+11_OpenCV/data/Videos/

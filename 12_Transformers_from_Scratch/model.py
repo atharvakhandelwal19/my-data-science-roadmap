@@ -230,8 +230,8 @@ def build_transformer(src_vocab_size: int, tgt_vocab_size: int, src_seq_length: 
     tgt_embed = InputEmbedding(d_model, tgt_vocab_size)
 
     #Create Positional Layers
-    src_pos = InputEmbedding(d_model, src_seq_length, dropout)
-    tgt_pos = InputEmbedding(d_model, tgt_seq_length, dropout)
+    src_pos = PositionalEncoding(d_model, src_seq_length, dropout)
+    tgt_pos = PositionalEncoding(d_model, tgt_seq_length, dropout)
 
     #Create Encoder Blocks
     encoder_blocks = []

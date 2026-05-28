@@ -72,7 +72,7 @@ class LayerNormalization(nn.Module):
 
 class FeedForwardBlock(nn.Module):
     def __init__(self, d_model:int, d_ff:int, dropout:float):
-        super().__init__(self)
+        super().__init__()
         self.linear_1 = nn.Linear(d_model, d_ff)
         self.dropout = nn.Dropout(dropout)
         self.linear_2 = nn.Linear(d_ff, d_model)
@@ -83,7 +83,7 @@ class FeedForwardBlock(nn.Module):
     
 class MultiHeadAttention(nn.Module):
     def __init__(self, d_model:int, h:int, dropout:float):
-        super().__init__(self)
+        super().__init__()
         self.dropout = nn.Dropout(dropout)
         self.d_model = d_model
         self.h= h

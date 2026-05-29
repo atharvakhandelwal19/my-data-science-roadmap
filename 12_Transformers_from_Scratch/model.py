@@ -17,7 +17,7 @@ class PositionalEncoding(nn.Module):
     def __init__(self, d_model:int, seq_length:int, dropout:float):
         super().__init__()
         self.d_model = d_model
-        self.seq_lenth = seq_length
+        self.seq_length = seq_length
         self.dropout = nn.Dropout(dropout)
 
         # Creating a Matrix of shape (seq_lenth, d_model)
@@ -48,7 +48,7 @@ class PositionalEncoding(nn.Module):
         pe[:, 0::2] = torch.sin(position*div_term)
         pe[:, 1::2] = torch.cos(position*div_term)
 
-        pe.unsqueeze(0) # (1, seq_length, d_model)
+        pe = pe.unsqueeze(0) # (1, seq_length, d_model)
         self.register_buffer('pe', pe)
 
     def forward(self,x):
@@ -67,7 +67,7 @@ class LayerNormalization(nn.Module):
         mean = x.mean(dim=-1, keepdim=True)
         std = x.std(dim=-1, keepdim=True)
 
-        return self.alpha * (x-mean)/(std-self.eps) + self.bias
+        return self.alpha * (x - mean) / (std + self.eps) + self.bias
 
 
 class FeedForwardBlock(nn.Module):
@@ -123,7 +123,7 @@ class MultiHeadAttention(nn.Module):
 
         x = x.transpose(1,2).contiguous().view(x.shape[0], -1, self.h * self.d_k)
 
-        return self.w_0(x)
+        return self.w_o(x)
 
 class ResidualConnection(nn.Module):
     def __init__(self, dropout: float):
@@ -152,7 +152,7 @@ class Encoder(nn.Module):
     def __init__(self,  layers: nn.ModuleList) -> None:
         super().__init__()
         self.layers = layers
-        self.norm = LayerNormalization
+        self.norm = LayerNormalization()
 
     def forward(self,x, mask):
         for layer in self.layers:
@@ -185,7 +185,7 @@ class Decoder(nn.Module):
     def forward(self,x, encoder_output, src_mask, tgt_mask):
         for layer in self.layers:
             x = layer(x, encoder_output, src_mask, tgt_mask)
-        self.norm(x)
+        return self.norm(x)
 
 class ProjectionLayer(nn.Module):
     def __init__(self, d_model:int, vocab_size:int):
@@ -217,7 +217,7 @@ class Transformer(nn.Module):
     def decode(self, encoder_output, src_mask, tgt, tgt_mask):
         tgt = self.tgt_embed(tgt)
         tgt = self.tgt_pos(tgt)
-        return self.decoder(tgt, encoder_output, tgt, tgt_mask)
+        return self.decoder(tgt, encoder_output, src_mask, tgt_mask)
     
     def project(self,x):
         return self.projection_layer(x)
